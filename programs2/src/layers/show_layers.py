@@ -5,7 +5,7 @@ from .vector_layer_operations.buttons_panel import LayerButtonsPanel
 class LayerWindow(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
-        self.title("Warstwy")
+        self.title("Warstwy rastrowe")
 
         # Tabela warstw
         self.table_widget = LayerTableWidget(self)

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from ..state import active_layers
+from ..state import layers_table, layers_dict
 
 class LayerTableWidget(ttk.Frame):
     def __init__(self, parent, col_widths=None):
@@ -9,8 +9,10 @@ class LayerTableWidget(ttk.Frame):
         if col_widths is None:
             col_widths = {
                 "nazwa": 150,
-                "geometria": 230,
-                "crs": 230
+                "wysokość": 100,
+                "szerokość": 100,
+                "crs": 150,
+                "liczba kanałów": 110
             }
 
         self.col_widths = col_widths
@@ -20,7 +22,6 @@ class LayerTableWidget(ttk.Frame):
         self.load_layers()
 
     def create_widgets(self):
-        # Rama dla tabeli i paska przewijania
         self.frame_table = ttk.Frame(self)
         self.frame_table.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -36,12 +37,18 @@ class LayerTableWidget(ttk.Frame):
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
     def load_layers(self):
-        """Odświeża listę warstw z obiektu stanu active_layers."""
+        """Odświeża listę warstw rastrowych z obiektu stanu layers_table / layers_dict."""
         for item in self.tree.get_children():
             self.tree.delete(item)
 
-        for layer_id, layer in active_layers.items():
-            self.tree.insert("", tk.END, iid=layer_id, values=(layer.name, layer.geometry, layer.crs))
+        for idx, row in layers_table.iterrows():
+            self.tree.insert("", tk.END, iid=str(idx), values=(
+                row.get("nazwa"),
+                row.get("wysokość"),
+                row.get("szerokość"),
+                row.get("crs"),
+                row.get("liczba kanałów")
+            ))
 
     def get_selected_layer_ids(self):
         return self.tree.selection()
